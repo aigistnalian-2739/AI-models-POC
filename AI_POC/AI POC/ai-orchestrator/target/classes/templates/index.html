@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-8">
+<div class="max-w-5xl mx-auto">
+    <h1 class="text-4xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+        Agentic Code Orchestrator
+    </h1>
+
+    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 mb-8">
+        <label class="block text-sm font-medium text-slate-400 mb-2">Target Project Absolute Path</label>
+        <input type="text" id="projPath" name="path" placeholder="/Users/name/projects/target-app"
+               class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <div class="flex space-x-4 mb-6">
+        <button onclick="switchTab('pipeline')" id="tab-p" class="px-6 py-2 border-b-2 border-blue-500">Document & Test</button>
+        <button onclick="switchTab('audit')" id="tab-a" class="px-6 py-2 border-b-2 border-transparent text-slate-400">Quality Audit</button>
+    </div>
+
+    <div id="pipeline-section">
+        <button hx-post="/api/analyze" hx-include="#projPath" hx-target="#log" hx-indicator="#loader"
+                class="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-lg font-bold">Run Architect Pipeline</button>
+        <div id="log" class="mt-6 p-6 bg-black rounded-xl font-mono text-sm text-emerald-400 whitespace-pre-wrap border border-slate-800 min-h-[200px]"></div>
+    </div>
+
+    <div id="audit-section" class="hidden">
+        <button hx-post="/api/audit" hx-include="#projPath" hx-target="#audit-log" hx-indicator="#loader"
+                class="bg-emerald-600 hover:bg-emerald-500 px-8 py-3 rounded-lg font-bold">Run Quality Scan</button>
+        <div id="audit-log" class="mt-6 p-6 bg-slate-800 rounded-xl border border-slate-700"></div>
+    </div>
+
+    <div id="loader" class="htmx-indicator mt-4 text-blue-400 animate-pulse">Agents are working...</div>
+</div>
+
+<script>
+        function switchTab(t) {
+            document.getElementById('pipeline-section').classList.toggle('hidden', t !== 'pipeline');
+            document.getElementById('audit-section').classList.toggle('hidden', t !== 'audit');
+            document.getElementById('tab-p').className = t === 'pipeline' ? 'px-6 py-2 border-b-2 border-blue-500' : 'px-6 py-2 text-slate-400';
+            document.getElementById('tab-a').className = t === 'audit' ? 'px-6 py-2 border-b-2 border-emerald-500' : 'px-6 py-2 text-slate-400';
+        }
+    </script>
+</body>
+</html>

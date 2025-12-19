@@ -1,0 +1,41 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.ai.autoconfigure.vectorstore.pgvector.PgVectorStoreAutoConfiguration
+  ai:
+    openai:
+      # Remove everything except the domain.
+      # Spring AI M4 will append the /v1/chat/completions automatically.
+      api-key:
+      base-url: https://models.inference.ai.azure.com
+      chat:
+        completions-path: /chat/completions
+        options:
+          model: gpt-4o
+    google:
+      vertex:
+        gemini:
+          api-key:
+  datasource:
+    url: jdbc:h2:file:./data/ai_db
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.web.client.RestClient: DEBUG
+    org.springframework.ai: DEBUG
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    # This allows you to toggle between the live API and your AI-generated specs
+    urls:
+      - name: Orchestrator API (Live)
+        url: /v3/api-docs
+      - name: AI-Generated Spec
+        url: /generated/openapi.yaml
+
+
